@@ -1,19 +1,32 @@
 #!/usr/bin/env python
 
 import tensorflow as tf
+import numpy as np
+import os
+import skimage
 
 from keras.models import Sequential
 from keras.layers import Dense, Activation
 
-model = Sequential()
-model.add(Dense(32, input_shape=(16,)))
-#above line adds first layer with input arrays of (*,16)
-#and outputs an array of shape (*, 32)
-model.add(Dense(32))
+def load_data(training_directory):
+    directories = [d for d in os.listdir(training_directory) if os.path.isdir(os.path.join(training_directory, d))]
+    labels = []
+    images = []
+    for d in directories:
+        label_directory = os.path.join(training_directory, d)
+        file_names = [os.path.join(label_directory, f) for f in os.listdir(label_directory) if f.endswith(".ppm")]
+        for f in file_names:
+            images.append(skimage.data.imread(f))
+            labels.append(int(d))
+    return images, labels
 
-x1 = tf.constant([1, 2, 4, 5])
-x2 = tf.constant([2, 2, 1, 4])
-result = tf.multiply(x1, x2)
-with tf.Session() as sesh:
-    output = sesh.run(result)
-    print(output)
+root_path = "/Users/matthewberntsen/schoolwork/git/tensorflowpractice"
+training_directory = os.path.join(root_path, "Training")
+testing_directory = os.path.join(root_path, "Testing")
+
+images, labels = load_data(training_directory)
+images = np.array(images)
+print(images.ndim)
+print(images.size)
+
+images[0]
