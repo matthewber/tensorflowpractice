@@ -25,7 +25,7 @@ def cnn_model_fn(features, labels, mode):
 def load_data(training_directory):
     directories = [d for d in os.listdir(training_directory) if os.path.isdir(os.path.join(training_directory, d))]
     labels = []
-    image = []
+    images = []
     for d in directories:
         label_directory = os.path.join(training_directory, d)
         file_names = [os.path.join(label_directory, f) for f in os.listdir(label_directory) if f.endswith(".ppm")]
